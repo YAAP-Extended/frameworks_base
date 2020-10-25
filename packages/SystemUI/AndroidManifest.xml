@@ -392,6 +392,9 @@
     <!-- To be able to decipher default applications for certain roles in shortcut helper -->
     <uses-permission android:name="android.permission.MANAGE_DEFAULT_APPLICATIONS" />
 
+    <!-- Pulse -->
+    <uses-permission android:name="android.permission.MODIFY_AUDIO_SETTINGS" />
+
     <!-- OmniJaws -->
     <uses-permission android:name="org.omnirom.omnijaws.READ_WEATHER" />
 

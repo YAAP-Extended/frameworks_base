@@ -269,4 +269,9 @@ public interface StatusBarManagerInternal {
     void moveFocusedTaskToDesktop(int displayId);
 
     void toggleCameraFlash();
+
+    /**
+     * Window manager notifies SystemUI of navigation bar "left in landscape" changes
+     */
+    void leftInLandscapeChanged(boolean isLeft);
 }
