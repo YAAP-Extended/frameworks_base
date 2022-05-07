@@ -22,6 +22,7 @@ import static android.view.WindowManagerPolicyConstants.NAV_BAR_MODE_GESTURAL;
 
 import android.annotation.Nullable;
 import android.app.ActivityManager;
+import android.content.ContentResolver;
 import android.content.Context;
 import android.content.om.IOverlayManager;
 import android.content.res.Configuration;
@@ -92,8 +93,13 @@ public class NavigationBarInflaterView extends FrameLayout implements TunerServi
 
     private static final String KEY_NAVIGATION_HINT =
             Settings.Secure.NAVIGATION_BAR_HINT;
+    private static final String KEY_KEYBOARD_NO_NAVIGATION =
+            Settings.Secure.KEYBOARD_NO_NAVIGATION_BAR;
     private static final String OVERLAY_NAVIGATION_HIDE_HINT =
             "org.yaap.overlay.customization.navbar.nohint";
+    private static final String OVERLAY_KEYBOARD_HIDE_NAVIGATION =
+            "org.yaap.overlay.customization.navbar.keyboard.nonavbar";
+    private final ContentResolver mContentResolver;
 
     private static class Listener implements NavigationModeController.ModeChangedListener {
         private final WeakReference<NavigationBarInflaterView> mSelf;
@@ -142,6 +148,7 @@ public class NavigationBarInflaterView extends FrameLayout implements TunerServi
     private int mNavBarMode = NAV_BAR_MODE_3BUTTON;
 
     private boolean mIsHintDisabled;
+    private boolean mIsKeyboardNavigationDisabled;
 
     public NavigationBarInflaterView(Context context, AttributeSet attrs) {
         super(context, attrs);
@@ -152,6 +159,7 @@ public class NavigationBarInflaterView extends FrameLayout implements TunerServi
         mNavBarMode = Dependency.get(NavigationModeController.class).addListener(mListener);
         mNavBarLayoutInverse = controller.shouldInvertNavBarLayout();
         updateLayoutInversion();
+        mContentResolver = context.getContentResolver();
     }
 
     @VisibleForTesting
@@ -195,6 +203,9 @@ public class NavigationBarInflaterView extends FrameLayout implements TunerServi
     }
 
     private void onNavigationModeChanged(int mode) {
+        if (mNavBarMode == mode)
+            return;
+
         mNavBarMode = mode;
         onLikelyDefaultLayoutChange();
     }
@@ -223,6 +234,7 @@ public class NavigationBarInflaterView extends FrameLayout implements TunerServi
     protected void onAttachedToWindow() {
         super.onAttachedToWindow();
         Dependency.get(TunerService.class).addTunable(this, KEY_NAVIGATION_HINT);
+        Dependency.get(TunerService.class).addTunable(this, KEY_KEYBOARD_NO_NAVIGATION);
     }
 
     @Override
@@ -238,11 +250,15 @@ public class NavigationBarInflaterView extends FrameLayout implements TunerServi
     }
 
     public void onTuningChanged(String key, String newValue) {
-        if (KEY_NAVIGATION_HINT.equals(key)) {
-            mIsHintDisabled = TunerService.parseIntegerSwitch(newValue, false);
-            updateHint();
-            onLikelyDefaultLayoutChange();
-        }
+        if (!KEY_NAVIGATION_HINT.equals(key) && !KEY_KEYBOARD_NO_NAVIGATION.equals(key))
+            return;
+
+        mIsHintDisabled = TunerService.parseIntegerSwitch(
+            Settings.Secure.getString(mContentResolver, KEY_NAVIGATION_HINT), false);
+        mIsKeyboardNavigationDisabled = TunerService.parseIntegerSwitch(
+            Settings.Secure.getString(mContentResolver, KEY_KEYBOARD_NO_NAVIGATION), false);
+        updateHint();
+        onLikelyDefaultLayoutChange();
     }
 
     public void onLikelyDefaultLayoutChange() {
@@ -305,10 +321,14 @@ public class NavigationBarInflaterView extends FrameLayout implements TunerServi
         final int userId = ActivityManager.getCurrentUser();
         try {
             iom.setEnabled(OVERLAY_NAVIGATION_HIDE_HINT, state, userId);
+            iom.setEnabled(OVERLAY_KEYBOARD_HIDE_NAVIGATION,
+                    state && mIsKeyboardNavigationDisabled, userId);
             if (state) {
                 // As overlays are also used to apply navigation mode, it is needed to set
                 // our customization overlay to highest priority to ensure it is applied.
                 iom.setHighestPriority(OVERLAY_NAVIGATION_HIDE_HINT, userId);
+                if (mIsKeyboardNavigationDisabled)
+                    iom.setHighestPriority(OVERLAY_KEYBOARD_HIDE_NAVIGATION, userId);
             }
         } catch (IllegalArgumentException | RemoteException e) {
             Log.e(TAG, "Failed to " + (state ? "enable" : "disable")
