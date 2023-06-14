@@ -29,6 +29,7 @@ import com.android.systemui.qs.tileimpl.QSTileImpl
 import com.android.systemui.qs.tiles.AlarmTile
 import com.android.systemui.qs.tiles.AODTile
 import com.android.systemui.qs.tiles.CaffeineTile
+import com.android.systemui.qs.tiles.CellularTile
 import com.android.systemui.qs.tiles.CameraToggleTile
 import com.android.systemui.qs.tiles.DndTile
 import com.android.systemui.qs.tiles.FlashlightTile
@@ -40,6 +41,7 @@ import com.android.systemui.qs.tiles.MicrophoneToggleTile
 import com.android.systemui.qs.tiles.ModesTile
 import com.android.systemui.qs.tiles.PowerShareTile
 import com.android.systemui.qs.tiles.UiModeNightTile
+import com.android.systemui.qs.tiles.WifiTile
 import com.android.systemui.qs.tiles.WorkModeTile
 import com.android.systemui.qs.tiles.base.interactor.QSTileAvailabilityInteractor
 import com.android.systemui.qs.tiles.base.viewmodel.QSTileViewModelFactory
@@ -502,6 +504,12 @@ interface PolicyModule {
     @StringKey(CaffeineTile.TILE_SPEC)
     fun bindCaffeineTile(caffeineTile: CaffeineTile): QSTileImpl<*>
 
+    /** Inject CellularTile into tileMap in QSModule */
+    @Binds
+    @IntoMap
+    @StringKey(CellularTile.TILE_SPEC)
+    fun bindCellularTile(cellularTile: CellularTile): QSTileImpl<*>
+
     @Binds
     @IntoMap
     @StringKey(GamingModeTile.TILE_SPEC)
@@ -516,4 +524,10 @@ interface PolicyModule {
     @IntoMap
     @StringKey(PowerShareTile.TILE_SPEC)
     fun bindPowerShareTile(powerShareTile: PowerShareTile): QSTileImpl<*>
+
+    /** Inject WifiTile into tileMap in QSModule */
+    @Binds
+    @IntoMap
+    @StringKey(WifiTile.TILE_SPEC)
+    fun bindWifiTile(wifiTile: WifiTile): QSTileImpl<*>
 }
