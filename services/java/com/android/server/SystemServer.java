@@ -170,6 +170,7 @@ import com.android.server.devicestate.DeviceStateManagerService;
 import com.android.server.display.AutoDCDimService;
 import com.android.server.display.AutoDimService;
 import com.android.server.display.AutoAODService;
+import com.android.server.display.AODOnChargeService;
 import com.android.server.display.DisplayManagerService;
 import com.android.server.display.FreeformService;
 import com.android.server.display.color.ColorDisplayService;
@@ -2799,6 +2800,11 @@ public final class SystemServer implements Dumpable {
                     com.android.internal.R.string.config_pocketBridgeSysfsInpocket).isEmpty()) {
                 t.traceBegin("StartPocketBridgeService");
                 mSystemServiceManager.startService(PocketBridgeService.class);
+                t.traceEnd();
+            }
+            if (context.getResources().getBoolean(R.bool.config_dozeAlwaysOnDisplayAvailable)) {
+                t.traceBegin("AODOnChargeService");
+                mSystemServiceManager.startService(AODOnChargeService.class);
                 t.traceEnd();
             }
         }
