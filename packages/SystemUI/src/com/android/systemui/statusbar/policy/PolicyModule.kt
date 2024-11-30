@@ -41,6 +41,7 @@ import com.android.systemui.qs.tiles.MicrophoneToggleTile
 import com.android.systemui.qs.tiles.ModesTile
 import com.android.systemui.qs.tiles.PowerShareTile
 import com.android.systemui.qs.tiles.UiModeNightTile
+import com.android.systemui.qs.tiles.VolumeControlTile
 import com.android.systemui.qs.tiles.WifiTile
 import com.android.systemui.qs.tiles.WorkModeTile
 import com.android.systemui.qs.tiles.base.interactor.QSTileAvailabilityInteractor
@@ -524,6 +525,12 @@ interface PolicyModule {
     @IntoMap
     @StringKey(PowerShareTile.TILE_SPEC)
     fun bindPowerShareTile(powerShareTile: PowerShareTile): QSTileImpl<*>
+
+    /** Inject VolumeControlTile into tileMap in QSModule */
+    @Binds
+    @IntoMap
+    @StringKey(VolumeControlTile.TILE_SPEC)
+    fun bindVolumeControlTile(volumeControlTile: VolumeControlTile): QSTileImpl<*>
 
     /** Inject WifiTile into tileMap in QSModule */
     @Binds
