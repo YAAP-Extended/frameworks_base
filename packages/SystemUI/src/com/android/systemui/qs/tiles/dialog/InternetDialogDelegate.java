@@ -313,7 +313,8 @@ public class InternetDialogDelegate implements
         mWifiRecyclerView.setLayoutManager(new LinearLayoutManager(context));
         mWifiRecyclerView.setAdapter(mAdapter);
 
-        updateDialogUI(getWifiNetworkContent());
+        updateDialogUI(getWifiNetworkContent(), false);
+        setHotspotLayout();
     }
 
     @Override
@@ -397,7 +398,10 @@ public class InternetDialogDelegate implements
                 internetContent.mIsAirplaneModeEnabled ? View.VISIBLE : View.GONE);
 
         updateEthernet(internetContent);
-        setMobileDataLayout(internetContent);
+        
+        if (!shouldUpdateHotspot) {
+            setMobileDataLayout(internetContent);
+        }
 
         if (!mCanConfigWifi) {
             return;
