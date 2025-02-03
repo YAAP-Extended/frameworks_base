@@ -109,8 +109,7 @@ constructor(
                 R.dimen.auth_ripple_animation_duration).toLong()
     }
 
-    private val isRippleEnabled: Boolean
-        get() = biometricUnlockController.mode != MODE_WAKE_AND_UNLOCK
+    private val isRippleEnabled: Boolean = false
 
     override fun start() {
         init()
