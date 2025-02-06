@@ -58,6 +58,7 @@ import com.android.systemui.tuner.TunerService;
 import dagger.Lazy;
 
 import java.util.function.Consumer;
+import java.util.concurrent.Executor;
 
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -113,6 +114,17 @@ public class Dependency {
     private final ArrayMap<Object, Object> mDependencies = new ArrayMap<>();
     private final ArrayMap<Object, LazyDependencyCreator> mProviders = new ArrayMap<>();
 
+    /**
+     * Generic executor on a background thread.
+     */
+    private static final String BACKGROUND_EXECUTOR_NAME = "background_executor";
+
+    /**
+     * Generic executor on a background thread.
+     */
+    public static final DependencyKey<Executor> BACKGROUND_EXECUTOR =
+            new DependencyKey<>(BACKGROUND_EXECUTOR_NAME);
+
     @Inject DumpManager mDumpManager;
 
     @Inject Lazy<BroadcastDispatcher> mBroadcastDispatcher;
@@ -149,6 +161,8 @@ public class Dependency {
     @Inject Lazy<DialogTransitionAnimator> mDialogTransitionAnimatorLazy;
     @Inject Lazy<UserTracker> mUserTrackerLazy;
     @Inject Lazy<StatusBarWindowControllerStore> mStatusBarWindowControllerStoreLazy;
+    @Inject Lazy<ActivityStarter> mActivityStarter;
+    @Inject @Background Lazy<Executor> mBackgroundExecutor;
 
     @Inject
     public Dependency() {
@@ -192,8 +206,8 @@ public class Dependency {
         mProviders.put(SystemUIDialogManager.class, mSystemUIDialogManagerLazy::get);
         mProviders.put(DialogTransitionAnimator.class, mDialogTransitionAnimatorLazy::get);
         mProviders.put(UserTracker.class, mUserTrackerLazy::get);
-        mProviders.put(
-                StatusBarWindowControllerStore.class, mStatusBarWindowControllerStoreLazy::get);
+        mProviders.put(StatusBarWindowControllerStore.class, mStatusBarWindowControllerStoreLazy::get);
+        mProviders.put(BACKGROUND_EXECUTOR, mBackgroundExecutor::get);
 
         Dependency.setInstance(this);
     }
