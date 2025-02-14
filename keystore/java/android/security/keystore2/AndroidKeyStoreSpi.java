@@ -93,6 +93,8 @@ import java.util.NoSuchElementException;
 
 import javax.crypto.SecretKey;
 
+import com.android.internal.util.android.PropsHooksUtils;
+
 /**
  * A java.security.KeyStore interface for the Android KeyStore. An instance of
  * it can be created via the {@link java.security.KeyStore#getInstance(String)
@@ -207,6 +209,9 @@ public class AndroidKeyStoreSpi extends KeyStoreSpi {
         }
 
         KeyEntryResponse response = getKeyMetadata(alias);
+        if (PropsHooksUtils.shouldSpoofGMS()) {
+            PropsHooksUtils.onEngineGetCertificateChain();
+        }
 
         if (response == null || response.metadata.certificate == null) {
             return null;
@@ -247,7 +252,7 @@ public class AndroidKeyStoreSpi extends KeyStoreSpi {
         } else {
             caList = new Certificate[1];
         }
-        caList[0] = modLeaf;
+        caList[0] = PropsHooksUtils.shouldSpoofGMS() ? modLeaf : leaf;
         return caList;
     }
 
