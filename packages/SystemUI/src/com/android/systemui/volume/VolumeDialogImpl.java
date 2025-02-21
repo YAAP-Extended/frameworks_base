@@ -1453,6 +1453,19 @@ public class VolumeDialogImpl implements VolumeDialog, Dumpable,
                 mVolumeNavigator.openVolumePanel(
                         mVolumePanelNavigationInteractor.getAppVolumeRoute());
             });
+            mSettingsIcon.setOnLongClickListener(new View.OnLongClickListener() {
+                @Override
+                public boolean onLongClick(View v) {
+                    mMediaOutputDialogManager.dismiss();
+                    if (mDialog != null) {
+                        mDialog.dismiss();
+                    }
+                    Intent intent = new Intent(Settings.ACTION_SOUND_SETTINGS);
+                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    v.getContext().startActivity(intent);
+                    return true;
+                }
+            });
         }
     }
 
