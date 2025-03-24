@@ -162,6 +162,18 @@ internal constructor(
         Assert.isMainThread()
         screenshotHandler.resetTimeout()
 
+        packageLabel = runCatching {
+            val info = packageManager.getApplicationInfo(screenshot.packageNameString, 0)
+            info.loadLabel(packageManager).toString()
+        }.getOrDefault(screenshot.packageNameString)
+        scrollCaptureExecutor.longScreenshotHolder.foregroundAppName = packageLabel
+
+        if (screenshot.type == WindowManager.TAKE_SCREENSHOT_SELECTED_REGION) {
+            startPartialScreenshotActivity(Process.myUserHandle())
+            finisher.accept(null)
+            return
+        }
+
         val currentBitmap = screenshot.bitmap
         if (currentBitmap == null) {
             Log.e(TAG, "handleScreenshot: Screenshot bitmap was null")
