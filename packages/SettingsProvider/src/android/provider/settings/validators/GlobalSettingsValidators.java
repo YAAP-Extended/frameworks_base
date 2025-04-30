@@ -478,5 +478,6 @@ public class GlobalSettingsValidators {
         VALIDATORS.put(Global.LOW_POWER_MODE_DMD, BOOLEAN_VALIDATOR);
         VALIDATORS.put(Global.BLUETOOTH_OFF_TIMEOUT, NON_NEGATIVE_INTEGER_VALIDATOR);
         VALIDATORS.put(Global.USER_MIN_AUTO_BRIGHTNESS, new InclusiveIntegerRangeValidator(0, 100));
+        VALIDATORS.put(Global.BERRY_BLACK_THEME, BOOLEAN_VALIDATOR);
     }
 }

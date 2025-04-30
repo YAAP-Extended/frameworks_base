@@ -8798,6 +8798,15 @@ public final class Settings {
                 "dark_theme_custom_end_time";
 
         /**
+         * Whether to use black theme for dark mode
+         */
+        public static final String BERRY_BLACK_THEME = "berry_black_theme";
+
+        /** @hide */
+        public static final Validator BERRY_BLACK_THEME_VALIDATOR =
+                sBooleanValidator;
+
+        /**
          * Defines value returned by {@link android.service.autofill.UserData#getMaxUserDataSize()}.
          *
          * @hide
