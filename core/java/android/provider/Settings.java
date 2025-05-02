@@ -8802,10 +8802,6 @@ public final class Settings {
          */
         public static final String BERRY_BLACK_THEME = "berry_black_theme";
 
-        /** @hide */
-        public static final Validator BERRY_BLACK_THEME_VALIDATOR =
-                sBooleanValidator;
-
         /**
          * Defines value returned by {@link android.service.autofill.UserData#getMaxUserDataSize()}.
          *

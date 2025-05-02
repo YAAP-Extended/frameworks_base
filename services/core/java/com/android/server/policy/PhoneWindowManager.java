@@ -8110,36 +8110,5 @@ public class PhoneWindowManager implements WindowManagerPolicy {
             dispatchMediaKeyWithWakeLockToAudioService(
                     KeyEvent.changeAction(event, KeyEvent.ACTION_UP));
         }
-        mVolumeMusicControlActive = true;
-    }
-
-    private void maybePerformQuickMute() {
-        // never mute in-call volume
-        int audioMode = AudioManager.MODE_NORMAL;
-        try {
-            audioMode = getAudioService().getMode();
-        } catch (Exception e) {
-            Log.e(TAG, "Error getting AudioService in maybePerformQuickMute.", e);
-        }
-        TelecomManager telecomManager = getTelecommService();
-        final boolean isInCall = (telecomManager != null && telecomManager.isInCall()) ||
-                audioMode != AudioManager.MODE_NORMAL;
-        if (isInCall) return;
-
-        // when we cast the default volume stream becomes the remote one, do not mute
-        if (isMusicActiveRemotely()) return;
-
-        // making sure there are no more volume down presses queued
-        mHandler.removeMessages(MSG_SYSTEM_KEY_PRESS);
-        
-        // muting current stream
-        final AudioManager am = (AudioManager) mContext.getSystemService(Context.AUDIO_SERVICE);
-        if (am == null) {
-            Log.w(TAG, "maybePerformQuickMute: couldn't get AudioManager reference");
-            return;
-        }
-        final int mediaStream = AudioManager.STREAM_MUSIC;
-        final int minVol = am.getStreamMinVolumeInt(mediaStream);
-        am.setStreamVolume(mediaStream, minVol, AudioManager.FLAG_SHOW_UI);
-    }
+        mVolBtnLongPress = true;
 }
