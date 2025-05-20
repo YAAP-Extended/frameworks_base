@@ -1702,4 +1702,12 @@
     <style name="Theme.SystemUI.Dialog.StickyKeys" parent="@style/Theme.SystemUI.Dialog">
         <item name="android:colorBackground">@color/transparent</item>
     </style>
+
+    <style name="Theme.SystemUI.Amoled" parent="Theme.SystemUI">
+        <item name="android:windowBackground">?attr/colorBackground</item>
+        <item name="colorBackground">?attr/colorBackground</item>
+        <item name="colorPrimary">?attr/colorPrimary</item>
+        <item name="colorPrimaryDark">?attr/colorPrimaryDark</item>
+        <item name="colorAccent">?attr/colorAccent</item>
+    </style>
 </resources>

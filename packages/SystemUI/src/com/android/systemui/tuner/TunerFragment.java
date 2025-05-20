@@ -22,6 +22,7 @@ import android.os.Bundle;
 
 import androidx.preference.Preference;
 import androidx.preference.PreferenceFragment;
+import androidx.preference.SwitchPreference;
 
 import com.android.internal.logging.MetricsLogger;
 import com.android.internal.logging.nano.MetricsProto.MetricsEvent;
@@ -82,6 +83,20 @@ public class TunerFragment extends PreferenceFragment {
                 Preference preference = findPreference(DEBUG_ONLY[i]);
                 if (preference != null) getPreferenceScreen().removePreference(preference);
             }
+        }
+        // Обработка AMOLED-темы
+        SwitchPreference amoledPref = findPreference("amoled_theme");
+        if (amoledPref != null) {
+            amoledPref.setOnPreferenceChangeListener((preference, newValue) -> {
+                boolean enabled = (Boolean) newValue;
+                if (enabled) {
+                    requireActivity().setTheme(R.style.Theme_SystemUI_Amoled);
+                } else {
+                    requireActivity().setTheme(R.style.Theme_SystemUI);
+                }
+                requireActivity().recreate();
+                return true;
+            });
         }
     }
 
