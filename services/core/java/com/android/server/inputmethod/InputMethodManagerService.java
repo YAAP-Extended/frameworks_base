@@ -74,6 +74,7 @@ import android.app.ActivityManagerInternal;
 import android.content.BroadcastReceiver;
 import android.content.ComponentName;
 import android.content.ContentProvider;
+import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
@@ -84,6 +85,7 @@ import android.content.pm.ResolveInfo;
 import android.content.pm.ServiceInfo;
 import android.content.pm.UserInfo;
 import android.content.res.Resources;
+import android.database.ContentObserver;
 import android.graphics.Region;
 import android.hardware.display.DisplayManagerInternal;
 import android.hardware.input.InputManager;
@@ -476,6 +478,14 @@ public final class InputMethodManagerService implements IInputMethodManagerImpl.
         @Override
         public void dumpToProto(ProtoOutputStream proto, @Nullable byte[] icProto) {
             dumpDebug(proto, InputMethodManagerServiceTraceProto.INPUT_METHOD_MANAGER_SERVICE);
+            ContentResolver resolver = mContext.getContentResolver();
+            resolver.registerContentObserverAsUser(Settings.Secure.getUriFor(
+                    "sysui_show_nav_bar_ime"),
+                    false, new ContentObserver(new Handler()) {
+                        @Override
+                        public void onChange(boolean selfChange) {
+                        }
+                    }, UserHandle.ALL);
         }
     };
 
@@ -636,6 +646,10 @@ public final class InputMethodManagerService implements IInputMethodManagerImpl.
                         mMenuController.updateKeyboardFromSettingsLocked(userId);
                     }
                 }
+                break;
+            }
+            case "sysui_show_nav_bar_ime": {
+                onUpdateResourceOverlay(userId);
                 break;
             }
             case Settings.Secure.ACCESSIBILITY_SOFT_KEYBOARD_MODE: {
@@ -1165,10 +1179,9 @@ public final class InputMethodManagerService implements IInputMethodManagerImpl.
                     InputMethodSettingsRepository.put(userId, settings);
 
                     final int profileParentId = userManagerInternal.getProfileParentId(userId);
-                    final boolean value =
-                            InputMethodDrawsNavBarResourceMonitor.evaluate(context,
-                                    profileParentId);
-                    userData.mImeDrawsNavBar.set(value);
+                    final boolean showNavBarIme = Settings.Secure.getIntForUser(
+                        context.getContentResolver(), "sysui_show_nav_bar_ime", 1, userId) == 1;
+                    userData.mImeDrawsNavBar.set(showNavBarIme);
 
                     userData.mBackgroundLoadLatch.countDown();
                     Slog.d(TAG, "Complete initialization for user=" + userId);
@@ -5362,13 +5375,13 @@ public final class InputMethodManagerService implements IInputMethodManagerImpl.
     @WorkerThread
     private void onUpdateResourceOverlay(@UserIdInt int userId) {
         final int profileParentId = mUserManagerInternal.getProfileParentId(userId);
-        final boolean value =
-                InputMethodDrawsNavBarResourceMonitor.evaluate(mContext, profileParentId);
         final var profileUserIds = mUserManagerInternal.getProfileIds(profileParentId, false);
+        final boolean showNavBarIme = Settings.Secure.getIntForUser(
+            mContext.getContentResolver(), "sysui_show_nav_bar_ime", 1, userId) == 1;
         final ArrayList<UserData> updatedUsers = new ArrayList<>();
         for (int profileUserId : profileUserIds) {
             final var userData = getUserData(profileUserId);
-            userData.mImeDrawsNavBar.set(value);
+            userData.mImeDrawsNavBar.set(showNavBarIme);
             updatedUsers.add(userData);
         }
         synchronized (ImfLock.class) {
