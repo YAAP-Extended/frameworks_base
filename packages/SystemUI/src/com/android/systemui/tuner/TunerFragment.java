@@ -89,12 +89,14 @@ public class TunerFragment extends PreferenceFragment {
         if (amoledPref != null) {
             amoledPref.setOnPreferenceChangeListener((preference, newValue) -> {
                 boolean enabled = (Boolean) newValue;
-                if (enabled) {
-                    requireActivity().setTheme(R.style.Theme_SystemUI_Amoled);
-                } else {
-                    requireActivity().setTheme(R.style.Theme_SystemUI);
+                if (getActivity() != null) {
+                    if (enabled) {
+                        getActivity().setTheme(R.style.Theme_SystemUI_Amoled);
+                    } else {
+                        getActivity().setTheme(R.style.Theme_SystemUI);
+                    }
+                    getActivity().recreate();
                 }
-                requireActivity().recreate();
                 return true;
             });
         }

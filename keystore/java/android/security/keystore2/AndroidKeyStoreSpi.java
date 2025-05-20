@@ -209,9 +209,9 @@ public class AndroidKeyStoreSpi extends KeyStoreSpi {
         }
 
         KeyEntryResponse response = getKeyMetadata(alias);
-        if (PropsHooksUtils.shouldSpoofGMS()) {
-            PropsHooksUtils.onEngineGetCertificateChain();
-        }
+        // if (PropsHooksUtils.shouldSpoofGMS()) {
+        //     PropsHooksUtils.onEngineGetCertificateChain();
+        // }
 
         if (response == null || response.metadata.certificate == null) {
             return null;
@@ -252,7 +252,7 @@ public class AndroidKeyStoreSpi extends KeyStoreSpi {
         } else {
             caList = new Certificate[1];
         }
-        caList[0] = PropsHooksUtils.shouldSpoofGMS() ? modLeaf : leaf;
+        caList[0] = leaf;
         return caList;
     }
 
