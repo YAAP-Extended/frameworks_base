@@ -57,7 +57,14 @@ public class PropsHooksUtils {
         if (context == null) return;
         String packageName = context.getPackageName();
         if (TextUtils.isEmpty(packageName)) {
+            sIsPhotos = false;
             return;
+        }
+        sIsPhotos = packageName.equals("com.google.android.apps.photos");
+        if (shouldSpoofPhotos()) {
+            for (Map.Entry<String, Object> entry : propsToChangePixelXL.entrySet()) {
+                setPropValue(entry.getKey(), entry.getValue());
+            }
         }
         if (packageName.equals(PACKAGE_VENDING)) {
             if (SystemProperties.getBoolean(SPOOF_VENDING_SDK32_ENABLED, true)) {
@@ -68,12 +75,6 @@ public class PropsHooksUtils {
                 } catch (Exception e) {
                     Log.e(TAG, "Failed to spoof vending SDK version", e);
                 }
-            }
-        }
-        sIsPhotos = packageName.equals("com.google.android.apps.photos");
-        if (shouldSpoofPhotos()) {
-            for (Map.Entry<String, Object> entry : propsToChangePixelXL.entrySet()) {
-                setPropValue(entry.getKey(), entry.getValue());
             }
         }
     }
