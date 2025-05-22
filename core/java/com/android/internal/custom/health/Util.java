@@ -3,7 +3,6 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 package com.android.internal.custom.health;
-;
 
 import android.content.Context;
 import android.text.format.DateFormat;
@@ -16,6 +15,7 @@ import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
 import java.util.Calendar;
 import java.util.TimeZone;
+
 public class Util {
     /**
      * Convert milliseconds to a string in the current locale's format.

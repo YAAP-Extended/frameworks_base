@@ -233,4 +233,8 @@
     <string-array name="demo_device_provisioning_known_signers">
         <item>@string/config_retailDemoPackageSignature</item>
     </string-array>
+
+    <string-array name="config_broadcaseReceiverValidationBypassPackages" translatable="false">
+        <item>com.android.vending</item>
+    </string-array>
 </resources>

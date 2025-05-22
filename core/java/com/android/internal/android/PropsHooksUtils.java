@@ -31,7 +31,11 @@ public class PropsHooksUtils {
 
     private static final boolean DEBUG = false;
     private static final String TAG = "PropsHooksUtils";
+    private static final String PACKAGE_VENDING = "com.android.vending";
+    private static final int VENDING_TARGET_SDK_INT = 32;
+    private static final String VENDING_TARGET_RELEASE_VERSION = "12";
     public static final String SPOOF_PIXEL_GPHOTOS = "persist.sys.pixelprops.gphotos";
+    public static final String SPOOF_VENDING_SDK32_ENABLED = "persist.sys.spoof.vending_sdk32";
     private static volatile boolean sIsPhotos;
     private static final Map<String, Object> propsToChangePixelXL;
     private static final Map<String, Field> fieldCache = new HashMap<>();
@@ -54,6 +58,17 @@ public class PropsHooksUtils {
         String packageName = context.getPackageName();
         if (TextUtils.isEmpty(packageName)) {
             return;
+        }
+        if (packageName.equals(PACKAGE_VENDING)) {
+            if (SystemProperties.getBoolean(SPOOF_VENDING_SDK32_ENABLED, true)) {
+                try {
+                    dlog("Spoofing SDK version for " + packageName + " to SDK " + VENDING_TARGET_SDK_INT);
+                    setVersionFieldInt("SDK_INT", VENDING_TARGET_SDK_INT);
+                    setVersionFieldString("RELEASE", VENDING_TARGET_RELEASE_VERSION);
+                } catch (Exception e) {
+                    Log.e(TAG, "Failed to spoof vending SDK version", e);
+                }
+            }
         }
         sIsPhotos = packageName.equals("com.google.android.apps.photos");
         if (shouldSpoofPhotos()) {
@@ -136,5 +151,25 @@ public class PropsHooksUtils {
 
     private static void dlog(String msg) {
         if (DEBUG) Log.d(TAG, msg);
+    }
+
+    private static void setVersionFieldInt(String key, int value) {
+        try {
+            Field field = Build.VERSION.class.getDeclaredField(key);
+            field.setAccessible(true);
+            field.setInt(null, value);
+        } catch (Exception e) {
+            Log.e(TAG, "Failed to set " + key + " to " + value, e);
+        }
+    }
+
+    private static void setVersionFieldString(String key, String value) {
+        try {
+            Field field = Build.VERSION.class.getDeclaredField(key);
+            field.setAccessible(true);
+            field.set(null, value);
+        } catch (Exception e) {
+            Log.e(TAG, "Failed to set " + key + " to " + value, e);
+        }
     }
 }
