@@ -251,5 +251,4 @@ interface IStatusBarService
      * YAAP extensions
      */
     void toggleCameraFlash();
-    void screenPinningStateChanged(boolean enabled);
 }
