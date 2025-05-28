@@ -1148,6 +1148,7 @@ public class ActivityTaskSupervisor implements RecentTasks.Callbacks {
             @Nullable String callingFeatureId, boolean ignoreTargetSecurity,
             boolean launchingInTask, WindowProcessController callerApp, ActivityRecord resultRecord,
             Task resultRootTask) {
+        if (com.android.internal.util.yaap.PropsHooksUtils.shouldBypassTaskPermission(callingUid)) return true;
         final boolean isCallerRecents = mService.getRecentTasks() != null
                 && mService.getRecentTasks().isCallerRecents(callingUid);
         final int startAnyPerm = mService.checkPermission(START_ANY_ACTIVITY, callingPid,

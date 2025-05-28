@@ -25,6 +25,7 @@ import android.hardware.security.keymint.HardwareAuthenticatorType;
 import android.hardware.security.keymint.KeyParameter;
 import android.hardware.security.keymint.SecurityLevel;
 import android.os.StrictMode;
+import android.os.SystemProperties;
 import android.security.Flags;
 import android.security.GateKeeper;
 import android.security.KeyStore2;
@@ -49,7 +50,7 @@ import android.util.Log;
 
 import com.android.internal.annotations.VisibleForTesting;
 import com.android.internal.util.KeyProviderManager;
-import com.android.internal.util.yaap.PixelPropsUtils;
+import com.android.internal.util.yaap.PropsHooksUtils;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
@@ -93,7 +94,7 @@ import java.util.NoSuchElementException;
 
 import javax.crypto.SecretKey;
 
-import com.android.internal.util.android.PropsHooksUtils;
+import com.android.internal.util.yaap.PropsHooksUtils;
 
 /**
  * A java.security.KeyStore interface for the Android KeyStore. An instance of
@@ -117,6 +118,8 @@ import com.android.internal.util.android.PropsHooksUtils;
 public class AndroidKeyStoreSpi extends KeyStoreSpi {
     public static final String TAG = "AndroidKeyStoreSpi";
     public static final String NAME = "AndroidKeyStore";
+
+    public static final String SPOOF_PIXEL_GMS = "persist.sys.pixelprops.gms";
 
     private KeyStore2 mKeyStore;
     private @KeyProperties.Namespace int mNamespace = KeyProperties.NAMESPACE_APPLICATION;
@@ -197,15 +200,9 @@ public class AndroidKeyStoreSpi extends KeyStoreSpi {
 
     @Override
     public Certificate[] engineGetCertificateChain(String alias) {
-        if (PixelPropsUtils.getIsEnabled() && !KeyProviderManager.isKeyboxAvailable()) {
-            if (PixelPropsUtils.getIsFinsky()) {
-                throw new UnsupportedOperationException("Blocking safetynet attestation for finsky");
-            }
-            for (StackTraceElement ste : Thread.currentThread().getStackTrace()) {
-                if (ste.getClassName().contains("DroidGuard")) {
-                    throw new UnsupportedOperationException("Blocking safetynet attestation");
-                }
-            }
+        boolean isPixelGmsEnabled = SystemProperties.getBoolean(SPOOF_PIXEL_GMS, true);
+        if (isPixelGmsEnabled) {
+            PropsHooksUtils.onEngineGetCertificateChain();
         }
 
         KeyEntryResponse response = getKeyMetadata(alias);

@@ -17,7 +17,7 @@
  * limitations under the License.
  */
 
-package com.android.internal.util.android;
+package com.android.internal.util.yaap;
 
 import android.app.ActivityTaskManager;
 import android.app.ActivityThread;
@@ -41,7 +41,7 @@ import android.util.Log;
 import android.view.WindowManager;
 
 import com.android.internal.R;
-import com.android.internal.util.android.Utils;
+import com.android.internal.util.yaap.YaapUtils;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;
@@ -79,7 +79,7 @@ public class PropsHooksUtils {
     public static final String SPOOF_VENDING_SDK32_ENABLED = "persist.sys.spoof.vending_sdk32";
 
 
-    private static final String TAG = PixelPropsUtils.class.getSimpleName();
+    private static final String TAG = PropsHooksUtils.class.getSimpleName();
     private static final boolean DEBUG = false;
 
     private static final String sDeviceModel =
@@ -647,5 +647,13 @@ public class PropsHooksUtils {
 
     public static void dlog(String msg) {
         if (DEBUG) Log.d(TAG, "[" + sProcessName + "] " + msg);
+    }
+
+    public static boolean hasSystemFeature(String name, int version, boolean hasSystemFeature) {
+        return hasSystemFeature;
+    }
+
+    public static boolean shouldSpoofGMS() {
+        return false; // По умолчанию возвращаем false
     }
 }
