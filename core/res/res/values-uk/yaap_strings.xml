@@ -18,41 +18,50 @@
 -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <!-- Cycle through ringer modes -->
-    <string name="volume_dialog_ringer_guidance_normal">Дзвінки та сповіщення дзвонитимуть</string>
+    <string name="volume_dialog_ringer_guidance_normal">Дзвінки та сповіщення будуть звучати</string>
 
     <!-- Reboot Confirmation Dialog.  Message in the confirmation dialog
          when the user asks to reboot. [CHAR LIMIT=NONE] -->
-    <string name="reboot_confirm">Ви хочете перезавантажити?</string>
+    <string name="reboot_confirm">Ви хочете перезавантажити пристрій?</string>
     <string name="reboot_title">Перезавантаження</string>
     <!-- advanced reboot to bootloader. -->
-    <string name="reboot_to_bootloader_title">Завантажувач</string>
-    <string name="reboot_to_bootloader_message">Перезавантаження в завантажувач\u2026</string>
+    <string name="reboot_to_bootloader_title">Перезавантаження в bootloader</string>
+    <string name="reboot_to_bootloader_message">Перезавантаження в bootloader…</string>
     <!-- advanced reboot to recovery. -->
-    <string name="reboot_to_recovery_title">Режим відновлення</string>
-    <string name="reboot_to_recovery_message">Перезавантаження в режим відновлення\u2026</string>
+    <string name="reboot_to_recovery_title">Перезавантаження в recovery</string>
+    <string name="reboot_to_recovery_message">Перезавантаження в recovery…</string>
     <!-- advanced reboot system -->
-    <string name="reboot_system_title">Система</string>
-    <string name="reboot_system_message">Перезавантаження в систему\u2026</string>
+    <string name="reboot_system_title">Перезавантаження системи</string>
+    <string name="reboot_system_message">Перезавантаження системи…</string>
     <!-- advanced reboot to fastboot. -->
-    <string name="reboot_to_fastboot_title">Fastboot</string>
-    <string name="reboot_to_fastboot_message">Перезавантаження в Fastboot\u2026</string>
+    <string name="reboot_to_fastboot_title">Перезавантаження в fastboot</string>
+    <string name="reboot_to_fastboot_message">Перезавантаження в fastboot…</string>
 
     <!-- Button that opens the screen with details of an application error -->
     <string name="aerr_show_details">Показати деталі</string>
 
     <!-- Pocket Lock -->
     <string name="pocket_lock_message_long_press">Натисніть і утримуйте кнопку живлення для розблокування</string>
-    <string name="pocket_view_title">Кишеньковий режим увімкнено</string>
-    <string name="pocket_view_title_cancel">Щоб скористатися телефоном:</string>
-    <string name="pocket_view_top_tag_cancel">Перевірте, чи область датчика вашого телефону вільна від будь-яких перешкод, і очистіть будь-який бруд або пил.</string>
-    <string name="pocket_view_top_tag_cancel2">Утримуйте кнопку живлення, щоб примусово вийти з кишенькового режиму.</string>
+    <string name="pocket_view_title">Режим кишені увімкнено</string>
+    <string name="pocket_view_title_cancel">Для активації телефону:</string>
+    <string name="pocket_view_top_tag_cancel">Будь ласка, не закривайте синю область телефону та очистіть бруд або пил з неї.</string>
+    <string name="pocket_view_top_tag_cancel2">Довге натискання кнопки живлення для примусового виходу з режиму кишені.</string>
 
     <!-- Title & summary of notification letting users know that battery saver is now on [CHAR_LIMIT=80] -->
-    <string name="battery_saver_on_notification_title">Енергозбереження ввімкнено</string>
-    <string name="battery_saver_on_notification_summary">За графіком. Натисніть, щоб переглянути налаштування.</string>
+    <string name="battery_saver_on_notification_title">Режим енергозбереження увімкнено</string>
+    <string name="battery_saver_on_notification_summary">За розкладом. Натисніть для перегляду налаштувань.</string>
 
     <!-- PowerOffAlarmService -->
-    <string name="notification_channel_poweroff_alarm">Вимк/Увімкнення за розкладом</string>
-    <string name="poweroff_alarm_title">Вимк/Увімкнення за розкладом встановлено</string>
-    <string name="poweroff_alarm_body">Було виявлено сигнал, і пристрій увімкнеться за 2 хвилини до його настання</string>
+    <string name="notification_channel_poweroff_alarm">Будильник при вимкненні</string>
+    <string name="poweroff_alarm_title">Встановлено будильник при вимкненні</string>
+    <string name="poweroff_alarm_body">Виявлено будильник. Ви можете вимкнути телефон, і він увімкнеться за 2 хвилини до спрацювання будильника</string>
+
+    <!-- Health interface -->
+    <string name="charging_control_notification_channel">Управління зарядкою</string>
+    <string name="charging_control_notification_title">Управління зарядкою</string>
+    <string name="charging_control_notification_cancel_once">Скасувати</string>
+    <string name="charging_control_notification_content_limit">Батарея буде заряджена до %1$d%%</string>
+    <string name="charging_control_notification_content_limit_reached">Батарея заряджена до %1$d%%</string>
+    <string name="charging_control_notification_content_target">Батарея буде повністю заряджена о %1$s</string>
+    <string name="charging_control_notification_content_target_reached">Батарея заряджена</string>
 </resources>
