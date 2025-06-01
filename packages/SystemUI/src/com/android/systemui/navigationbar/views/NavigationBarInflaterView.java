@@ -98,7 +98,7 @@ public class NavigationBarInflaterView extends FrameLayout implements TunerServi
     private static final String OVERLAY_NAVIGATION_HIDE_HINT =
             "org.yaap.overlay.customization.navbar.nohint";
     private static final String OVERLAY_KEYBOARD_HIDE_NAVIGATION =
-            "org.yaap.overlay.customization.navbar.keyboard.nonavbar";
+            "org.yaap.overlay.customization.keyboard.nonavbar";
     private final ContentResolver mContentResolver;
 
     private static class Listener implements NavigationModeController.ModeChangedListener {
